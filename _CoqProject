@@ -1,0 +1,36 @@
+-R . LM
+
+-install none
+COQDOCFLAGS = "--charset utf-8 -s --parse-comments --with-header ./website/resources/header.html --with-footer ./website/resources/footer.html --index indexpage"
+
+Base/Base.v
+
+Base/Tactics/Tactics.v
+Base/Tactics/AutoIndTac.v
+Base/Prelim.v
+Base/Numbers.v
+
+Base/Lists/BaseLists.v
+Base/Lists/Cardinality.v
+Base/Lists/Dupfree.v
+Base/Lists/Filter.v
+Base/Lists/Position.v
+Base/Lists/Power.v
+Base/Lists/Removal.v
+
+Base/Extra.v
+Base/Extra/Bijection.v
+Base/Extra/Vectors.v
+Base/FiniteTypes/BasicDefinitions.v
+Base/FiniteTypes/FinTypes.v
+Base/FiniteTypes/BasicFinTypes.v
+Base/FiniteTypes/CompoundFinTypes.v
+Base/FiniteTypes/Arbitrary.v
+
+ARS.v
+Prelims.v
+
+L.v
+Programs.v
+AbstractHeapMachine.v
+AbstractSubstMachine.v

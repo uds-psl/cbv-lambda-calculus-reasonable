@@ -1,0 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<link href="coqdocjs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript" src="coqdocjs.js"></script>
+</head>
+
+<body onload="document.getElementById('content').focus()">
+  <div id="header">
+    <span class="left">
+      <span class="modulename"> <script> document.write(document.title) </script> </span>
+    </span>
+
+    <span class="button" id="toggle-proofs"></span>
+
+    <span class="right">
+      <a href="../">Project Page</a>
+      <a href="./indexpage.html"> Index </a>
+      <a href="./toc.html"> Table of Contents </a>
+    </span>
+</div>
+    <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
+    <div id="main">
+<div class="code">
+</div>
+
+<div class="doc">
+Base Library for ICL
+
+<div class="paragraph"> </div>
+
+<ul class="doclist">
+<li> Version: 3 October 2016
+
+</li>
+<li> Author: Gert Smolka, Saarland University
+
+</li>
+<li> Acknowlegments: Sigurd Schneider, Dominik Kirst, Yannick Forster
+
+</li>
+</ul>
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Bool.Bool.html#"><span class="id" title="library">Bool</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.omega.Omega.html#"><span class="id" title="library">Omega</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#"><span class="id" title="library">List</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Setoids.Setoid.html#"><span class="id" title="library">Setoid</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Classes.Morphisms.html#"><span class="id" title="library">Morphisms</span></a> <a class="idref" href="LM.Base.Tactics.Tactics.html#"><span class="id" title="library">Tactics</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Set Implicit Arguments</span>.<br/>
+<span class="id" title="keyword">Global</span> <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Strict</span> <span class="id" title="keyword">Implicit</span>.<br/>
+<span class="id" title="keyword">Global</span> <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Printing</span> <span class="id" title="var">Records</span>.<br/>
+<span class="id" title="keyword">Global</span> <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Printing</span> <span class="id" title="keyword">Implicit</span> <span class="id" title="var">Defensive</span>.<br/>
+<span class="id" title="keyword">Global</span> <span class="id" title="keyword">Set</span> <span class="id" title="var">Regular</span> <span class="id" title="var">Subst</span> <span class="id" title="keyword">Tactic</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Extern</span> 4 =&gt; <span class="id" title="tactic">exact</span> <span class="id" title="var">_</span>. <span class="comment">(*&nbsp;makes&nbsp;auto&nbsp;use&nbsp;type&nbsp;class&nbsp;inference&nbsp;*)</span><br/>
+
+<br/>
+</div>
+
+<div class="doc">
+De Morgan laws 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="DM_or"><span class="id" title="lemma">DM_or</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="keyword">Prop</span>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#7a45dffb109c3069e5c675be68643e60"><span class="id" title="notation">\/</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="DM_exists"><span class="id" title="lemma">DM_exists</span></a> <span class="id" title="var">X</span> (<span class="id" title="var">p</span> : <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">exists</span></a> <span class="id" title="var">x</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">,</span></a> <a class="idref" href="LM.Base.Prelim.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="LM.Base.Prelim.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <span class="id" title="keyword">forall</span> <span class="id" title="var">x</span>, <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#p"><span class="id" title="variable">p</span></a> <a class="idref" href="LM.Base.Prelim.html#x"><span class="id" title="variable">x</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="comment">(***&nbsp;Boolean&nbsp;propositions&nbsp;and&nbsp;decisions&nbsp;*)</span><br/>
+
+<br/>
+<span class="id" title="keyword">Coercion</span> <span class="id" title="var">bool2Prop</span> (<span class="id" title="var">b</span> : <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a>) := <span class="id" title="keyword">if</span> <a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a> <span class="id" title="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#True"><span class="id" title="inductive">True</span></a> <span class="id" title="keyword">else</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#False"><span class="id" title="inductive">False</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="bool_Prop_true"><span class="id" title="lemma">bool_Prop_true</span></a> <span class="id" title="var">b</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">A</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">A</span>. <span class="id" title="tactic">exact</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#I"><span class="id" title="constructor">I</span></a>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="bool_Prop_false"><span class="id" title="lemma">bool_Prop_false</span></a> <span class="id" title="var">b</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">A</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">A</span>. <span class="id" title="var">cbn</span>. <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Resolve</span> <span class="id" title="var">bool_Prop_true</span> <span class="id" title="var">bool_Prop_false</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Extern</span> 4 =&gt; <br/>
+<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+|[ <span class="id" title="var">H</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#False"><span class="id" title="inductive">False</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span><br/>
+|[ <span class="id" title="var">H</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#bool2Prop"><span class="id" title="definition">bool2Prop</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span><br/>
+|[ <span class="id" title="var">H</span>: <a class="idref" href="LM.Base.Prelim.html#bool2Prop"><span class="id" title="definition">bool2Prop</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span><br/>
+|[ <span class="id" title="var">H</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">discriminate</span> <span class="id" title="var">H</span><br/>
+|[ <span class="id" title="var">H</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">discriminate</span> <span class="id" title="var">H</span><br/>
+|[ <span class="id" title="var">H</span>: ?<span class="id" title="var">b</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a>, <span class="id" title="var">H'</span>: <a class="idref" href="LM.Base.Prelim.html#bool2Prop"><span class="id" title="definition">bool2Prop</span></a>(?<span class="id" title="var">b</span>) |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H'</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H'</span><br/>
+<span class="comment">(*&nbsp;|<span class="inlinecode"></span> <span class="inlinecode"><span class="id" title="var">H</span>:</span> <span class="inlinecode">?<span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">el</span></span> <span class="inlinecode"><span class="id" title="var">nil</span></span> <span class="inlinecode">|-</span> <span class="inlinecode"><span class="id" title="var">_</span></span> <span class="inlinecode"></span>&nbsp;=&gt;&nbsp;destruct&nbsp;H&nbsp;*)</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="dec"><span class="id" title="definition">dec</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Prop</span>) : <span class="id" title="keyword">Type</span> := <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Specif.html#5bf2050e90b21ebc82dc5463d1ba338e"><span class="id" title="notation">{</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Specif.html#5bf2050e90b21ebc82dc5463d1ba338e"><span class="id" title="notation">}</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Specif.html#5bf2050e90b21ebc82dc5463d1ba338e"><span class="id" title="notation">+</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Specif.html#5bf2050e90b21ebc82dc5463d1ba338e"><span class="id" title="notation">{</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Specif.html#5bf2050e90b21ebc82dc5463d1ba338e"><span class="id" title="notation">}</span></a>.<br/>
+
+<br/>
+<span class="id" title="keyword">Coercion</span> <span class="id" title="var">dec2bool</span> <span class="id" title="var">P</span> (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="definition">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>) := <span class="id" title="keyword">if</span> <a class="idref" href="LM.Base.Prelim.html#d"><span class="id" title="variable">d</span></a> <span class="id" title="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <span class="id" title="keyword">else</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Existing</span> <span class="id" title="keyword">Class</span> <span class="id" title="var">dec</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="Dec"><span class="id" title="definition">Dec</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Prop</span>) (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) : <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> := <a class="idref" href="LM.Base.Prelim.html#d"><span class="id" title="variable">d</span></a>.<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <span class="id" title="var">X</span> {<span class="id" title="var">d</span>}.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_reflect"><span class="id" title="lemma">Dec_reflect</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Prop</span>) (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">d</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">A</span>|<span class="id" title="var">A</span>]; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="Decb"><span class="id" title="abbreviation">Decb</span></a> <span class="id" title="var">X</span> := (<a class="idref" href="LM.Base.Prelim.html#dec2bool"><span class="id" title="definition">dec2bool</span></a> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <span class="id" title="var">X</span>)).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_reflect_eq"><span class="id" title="lemma">Dec_reflect_eq</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <span class="id" title="keyword">Prop</span>) (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">e</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>) :<br/>
+&nbsp;<a class="idref" href="LM.Base.Prelim.html#Decb"><span class="id" title="abbreviation">Decb</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="LM.Base.Prelim.html#Decb"><span class="id" title="abbreviation">Decb</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a>  <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">d</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">D</span>|<span class="id" title="var">D</span>], <span class="id" title="var">e</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">E</span>|<span class="id" title="var">E</span>]; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">intuition</span> <span class="id" title="tactic">congruence</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_auto"><span class="id" title="lemma">Dec_auto</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Prop</span>) (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">d</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">A</span>|<span class="id" title="var">A</span>]; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_auto_not"><span class="id" title="lemma">Dec_auto_not</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Prop</span>) (<span class="id" title="var">d</span>: <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">d</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">A</span>|<span class="id" title="var">A</span>]; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Resolve</span> <span class="id" title="var">Dec_auto</span> <span class="id" title="var">Dec_auto_not</span>.<br/>
+<span class="id" title="keyword">Hint Extern</span> 4 =&gt;  <span class="comment">(*&nbsp;Improves&nbsp;type&nbsp;class&nbsp;inference&nbsp;*)</span><br/>
+<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| [  |- <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> ((<span class="id" title="keyword">fun</span> <span class="id" title="var">_</span> =&gt; <span class="id" title="var">_</span>) <span class="id" title="var">_</span>) ] =&gt; <span class="id" title="var">cbn</span><br/>
+<span class="id" title="keyword">end</span> : <span class="id" title="var">typeclass_instances</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Tactic Notation</span> "decide" <span class="id" title="keyword">constr</span>(<span class="id" title="var">p</span>) := <br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <span class="id" title="var">p</span>).<br/>
+<span class="id" title="keyword">Tactic Notation</span> "decide" <span class="id" title="keyword">constr</span>(<span class="id" title="var">p</span>) "as" <span class="id" title="var">simple_intropattern</span>(<span class="id" title="var">i</span>) := <br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <span class="id" title="var">p</span>) <span class="id" title="keyword">as</span> <span class="id" title="var">i</span>.<br/>
+<span class="id" title="keyword">Tactic Notation</span> "decide" "_" :=<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <span class="id" title="var">_</span>).<br/>
+<span class="id" title="keyword">Tactic Notation</span> "have" <span class="id" title="keyword">constr</span>(<span class="id" title="var">E</span>) := <span class="id" title="keyword">let</span> <span class="id" title="var">X</span> := <span class="id" title="tactic">fresh</span> "E" <span class="id" title="tactic">in</span> <span class="id" title="var">decide</span> <span class="id" title="var">E</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">X</span>|<span class="id" title="var">X</span>]; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">try</span> <span class="id" title="tactic">congruence</span>; <span class="id" title="tactic">try</span> <span class="id" title="tactic">omega</span>; <span class="id" title="tactic">clear</span> <span class="id" title="var">X</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_true"><span class="id" title="lemma">Dec_true</span></a> <span class="id" title="var">P</span> {<span class="id" title="var">H</span> : <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>} : <a class="idref" href="LM.Base.Prelim.html#dec2bool"><span class="id" title="definition">dec2bool</span></a> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">decide</span> <span class="id" title="var">P</span>; <span class="id" title="tactic">cbv</span> <span class="id" title="tactic">in</span> *; <span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="Dec_false"><span class="id" title="lemma">Dec_false</span></a> <span class="id" title="var">P</span> {<span class="id" title="var">H</span> : <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>} : <a class="idref" href="LM.Base.Prelim.html#dec2bool"><span class="id" title="definition">dec2bool</span></a> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a><a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">decide</span> <span class="id" title="var">P</span>; <span class="id" title="tactic">cbv</span> <span class="id" title="tactic">in</span> *; <span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Hint Extern</span> 4 =&gt;<br/>
+<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;[ <span class="id" title="var">H</span> : <a class="idref" href="LM.Base.Prelim.html#dec2bool"><span class="id" title="definition">dec2bool</span></a> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> ?<span class="id" title="var">P</span>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a>  |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">apply</span> <a class="idref" href="LM.Base.Prelim.html#Dec_true"><span class="id" title="lemma">Dec_true</span></a> <span class="id" title="tactic">in</span>  <span class="id" title="var">H</span><br/>
+| [ <span class="id" title="var">H</span> : <a class="idref" href="LM.Base.Prelim.html#dec2bool"><span class="id" title="definition">dec2bool</span></a> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> ?<span class="id" title="var">P</span>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">apply</span> <a class="idref" href="LM.Base.Prelim.html#Dec_false"><span class="id" title="lemma">Dec_false</span></a> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span><br/>
+<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Decided propositions behave classically 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="dec_DN"><span class="id" title="lemma">dec_DN</span></a> <span class="id" title="var">X</span> : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="dec_DM_and"><span class="id" title="lemma">dec_DM_and</span></a> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#7a45dffb109c3069e5c675be68643e60"><span class="id" title="notation">\/</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="dec_DM_impl"><span class="id" title="lemma">dec_DM_impl</span></a> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Propagation rules for decisions 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Fact</span> <a name="dec_transfer"><span class="id" title="lemma">dec_transfer</span></a> <span class="id" title="var">P</span> <span class="id" title="var">Q</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Q"><span class="id" title="variable">Q</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#P"><span class="id" title="variable">P</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Q"><span class="id" title="variable">Q</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="bool_dec"><span class="id" title="instance">bool_dec</span></a> (<span class="id" title="var">b</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#b"><span class="id" title="variable">b</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">b</span>; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="True_dec"><span class="id" title="instance">True_dec</span></a> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#True"><span class="id" title="inductive">True</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="False_dec"><span class="id" title="instance">False_dec</span></a> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#False"><span class="id" title="inductive">False</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="impl_dec"><span class="id" title="instance">impl_dec</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="keyword">Prop</span>) :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="and_dec"><span class="id" title="instance">and_dec</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="keyword">Prop</span>) :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="or_dec"><span class="id" title="instance">or_dec</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="keyword">Prop</span>) : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#7a45dffb109c3069e5c675be68643e60"><span class="id" title="notation">\/</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>; <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="comment">(*&nbsp;Coq&nbsp;standard&nbsp;modules&nbsp;make&nbsp;"not"&nbsp;and&nbsp;"iff"&nbsp;opaque&nbsp;for&nbsp;type&nbsp;class&nbsp;inference,&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;can&nbsp;be&nbsp;seen&nbsp;with&nbsp;Print&nbsp;HintDb&nbsp;typeclass_instances.&nbsp;*)</span><br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="not_dec"><span class="id" title="instance">not_dec</span></a> (<span class="id" title="var">X</span> : <span class="id" title="keyword">Prop</span>) : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#611abc97cba304de784fa909dbdea1fa"><span class="id" title="notation">~</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#not"><span class="id" title="definition">not</span></a>. <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="iff_dec"><span class="id" title="instance">iff_dec</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="keyword">Prop</span>) : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#iff"><span class="id" title="definition">iff</span></a>. <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="comment">(***&nbsp;Discrete&nbsp;types&nbsp;*)</span><br/>
+
+<br/>
+<span class="id" title="keyword">Notation</span> <a name="c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">&quot;</span></a>'eq_dec' X" := (<span class="id" title="keyword">forall</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> : <span class="id" title="var">X</span>, <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a> (<a class="idref" href="LM.Base.Prelim.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><a class="idref" href="LM.Base.Prelim.html#y"><span class="id" title="variable">y</span></a>)) (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 70).<br/>
+
+<br/>
+<span class="id" title="keyword">Structure</span> <a name="eqType"><span class="id" title="record">eqType</span></a> := <a name="EqType"><span class="id" title="constructor">EqType</span></a> {<br/>
+&nbsp;&nbsp;<a name="eqType_X"><span class="id" title="projection">eqType_X</span></a> :&gt; <span class="id" title="keyword">Type</span>;<br/>
+&nbsp;&nbsp;<a name="eqType_dec"><span class="id" title="projection">eqType_dec</span></a> : <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#eqType_X"><span class="id" title="method">eqType_X</span></a> }.<br/>
+
+<br/>
+<span class="id" title="var">Arguments</span> <a class="idref" href="LM.Base.Prelim.html#EqType"><span class="id" title="constructor">EqType</span></a> <span class="id" title="var">X</span> {<span class="id" title="var">_</span>} : <span class="id" title="tactic">rename</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Canonical</span> <span class="id" title="keyword">Structure</span> <span class="id" title="var">eqType_CS</span> <span class="id" title="var">X</span> (<span class="id" title="var">A</span>: <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>) := <a class="idref" href="LM.Base.Prelim.html#EqType"><span class="id" title="constructor">EqType</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a>.<br/>
+
+<br/>
+<span class="id" title="var">Existing</span> <span class="id" title="keyword">Instance</span> <span class="id" title="var">eqType_dec</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="unit_eq_dec"><span class="id" title="instance">unit_eq_dec</span></a> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#unit"><span class="id" title="inductive">unit</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="bool_eq_dec"><span class="id" title="instance">bool_eq_dec</span></a> : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#bool"><span class="id" title="inductive">bool</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="nat_eq_dec"><span class="id" title="instance">nat_eq_dec</span></a> : <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="prod_eq_dec"><span class="id" title="instance">prod_eq_dec</span></a> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#d19c7eafd0e2d195d10df94b392087b5"><span class="id" title="notation">*</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="list_eq_dec"><span class="id" title="instance">list_eq_dec</span></a> <span class="id" title="var">X</span> :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a><a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="sum_eq_dec"><span class="id" title="instance">sum_eq_dec</span></a> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> :  <br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#3dcaec3b772747610227247939f96b01"><span class="id" title="notation">+</span></a> <a class="idref" href="LM.Base.Prelim.html#Y"><span class="id" title="variable">Y</span></a><a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="option_eq_dec"><span class="id" title="instance">option_eq_dec</span></a> <span class="id" title="var">X</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">(</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="LM.Base.Prelim.html#X"><span class="id" title="variable">X</span></a><a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Defined</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="Empty_set_eq_dec"><span class="id" title="instance">Empty_set_eq_dec</span></a>:<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#Empty_set"><span class="id" title="inductive">Empty_set</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="LM.Base.Prelim.html#dec"><span class="id" title="class">dec</span></a>. <span class="id" title="var">decide</span> <span class="id" title="var">equality</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="True_eq_dec"><span class="id" title="instance">True_eq_dec</span></a>:<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#True"><span class="id" title="inductive">True</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>,<span class="id" title="var">y</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">left</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Instance</span> <a name="False_eq_dec"><span class="id" title="instance">False_eq_dec</span></a>:<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#False"><span class="id" title="inductive">False</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> [].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+</div>
+<div id="footer">
+  Generated by <a href="http://coq.inria.fr/">coqdoc</a> and improved with <a href="https://github.com/tebbi/coqdocjs">CoqdocJS</a>
+</div>
+</div>
+</body>
+
+</html>

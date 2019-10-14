@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<link href="coqdocjs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript" src="coqdocjs.js"></script>
+</head>
+
+<body onload="document.getElementById('content').focus()">
+  <div id="header">
+    <span class="left">
+      <span class="modulename"> <script> document.write(document.title) </script> </span>
+    </span>
+
+    <span class="button" id="toggle-proofs"></span>
+
+    <span class="right">
+      <a href="../">Project Page</a>
+      <a href="./indexpage.html"> Index </a>
+      <a href="./toc.html"> Table of Contents </a>
+    </span>
+</div>
+    <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
+    <div id="main">
+<div class="code">
+<span class="comment">(*&nbsp;*&nbsp;Basic&nbsp;definitions&nbsp;of&nbsp;decidablility&nbsp;and&nbsp;Functions<br/>
+-&nbsp;includes&nbsp;basic&nbsp;Lemmas&nbsp;about&nbsp;said&nbsp;functions&nbsp;<br/>
+&nbsp;*)</span><br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <a class="idref" href="LM.Base.Base.html#"><span class="id" title="library">Base</span></a> <a class="idref" href="LM.Base.Extra.Bijection.html#"><span class="id" title="library">Extra.Bijection</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Definition of useful tactics 
+<div class="paragraph"> </div>
+
+ dec is used to destruct all decisions appearing in the goal or assumptions. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">dec</span> := <span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">destruct</span> <span class="id" title="var">Dec</span>).<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This tactic completely solves listComplete goals for base types 
+</div>
+<div class="code">
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">listComplete</span> := <span class="id" title="tactic">intros</span> <span class="id" title="var">x</span>; <span class="id" title="tactic">simpl</span>; <span class="id" title="var">dec</span>; <span class="id" title="tactic">destruct</span> <span class="id" title="var">x</span>; <span class="id" title="tactic">try</span> <span class="id" title="tactic">congruence</span>.<br/>
+</div>
+
+<div class="doc">
+simplifies (decision x = x) 
+</div>
+<div class="code">
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deq</span> <span class="id" title="var">x</span> := <span class="id" title="tactic">destruct</span> (<a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> (<span class="id" title="var">x</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><span class="id" title="var">x</span>)) <span class="id" title="keyword">as</span> [[]  | <span class="id" title="var">isnotequal</span>]; [&gt; | <span class="id" title="var">contradict</span> <span class="id" title="var">isnotequal</span>; <span class="id" title="tactic">reflexivity</span>] .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Conversion from Prop to bool
+</div>
+<div class="code">
+
+<br/>
+<span class="comment">(*&nbsp;Coercion&nbsp;toBool&nbsp;(P:&nbsp;Prop)&nbsp;(D:&nbsp;dec&nbsp;P)&nbsp;:=&nbsp;if&nbsp;Dec&nbsp;P&nbsp;then&nbsp;true&nbsp;else&nbsp;false.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;toBool&nbsp;P&nbsp;{D}.&nbsp;*)</span><br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Injectivity and surjectivity 
+</div>
+<div class="code">
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;Pure&nbsp;predicates&nbsp;&nbsp;*)</span><br/>
+&nbsp;<span class="comment">(*&nbsp;taken&nbsp;from&nbsp;the&nbsp;development&nbsp;of&nbsp;Herditarily&nbsp;finite&nbsp;sets&nbsp;by&nbsp;Prof.&nbsp;Smolka&nbsp;and&nbsp;Kathrin&nbsp;Stark.&nbsp;*)</span><br/>
+&nbsp;<span class="comment">(*&nbsp;*)</span>&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Definition&nbsp;pure&nbsp;(X:Type)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;{D:forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)}&nbsp;x&nbsp;:=&nbsp;if&nbsp;Dec&nbsp;(p&nbsp;x)&nbsp;then&nbsp;True&nbsp;else&nbsp;False.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;pure&nbsp;{X}&nbsp;p&nbsp;{D}&nbsp;x.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;pure_equiv&nbsp;&nbsp;(X:Type)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;{D:forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)}&nbsp;x&nbsp;:&nbsp;p&nbsp;x&nbsp;&lt;-&gt;&nbsp;pure&nbsp;p&nbsp;x.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;unfold&nbsp;pure.&nbsp;now&nbsp;dec.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;pure_impure&nbsp;&nbsp;(P:&nbsp;Prop)&nbsp;(_:&nbsp;dec&nbsp;P)&nbsp;(norm:&nbsp;if&nbsp;Dec&nbsp;(P)&nbsp;then&nbsp;True&nbsp;else&nbsp;False)&nbsp;:&nbsp;P.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;dec;&nbsp;tauto.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;Ltac&nbsp;impurify&nbsp;H&nbsp;:=&nbsp;pose&nbsp;proof&nbsp;(pure_impure&nbsp;H)&nbsp;as&nbsp;impureH;&nbsp;try&nbsp;(clear&nbsp;H;&nbsp;rename&nbsp;impureH&nbsp;into&nbsp;H).&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;Lemma&nbsp;purify&nbsp;(X:&nbsp;Type)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;(D:forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x))&nbsp;x&nbsp;(px:&nbsp;p&nbsp;x):&nbsp;pure&nbsp;p&nbsp;x.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;now&nbsp;&nbsp;apply&nbsp;pure_equiv.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;purify&nbsp;{X}&nbsp;{p}&nbsp;{D}&nbsp;{x}&nbsp;px.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;pure_eq&nbsp;(X:&nbsp;Type)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;(D:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x))&nbsp;x&nbsp;(p1&nbsp;p2:&nbsp;pure&nbsp;p&nbsp;x)&nbsp;:&nbsp;p1&nbsp;=&nbsp;p2.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;unfold&nbsp;pure&nbsp;in&nbsp;*.&nbsp;&nbsp;dec.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;+&nbsp;now&nbsp;destruct&nbsp;p1,&nbsp;p2.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;+&nbsp;contradiction&nbsp;p1.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;Proofs&nbsp;about&nbsp;equality&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;<span class="comment">(*&nbsp;This&nbsp;proof&nbsp;was&nbsp;heavily&nbsp;inspired&nbsp;by&nbsp;the&nbsp;proof&nbsp;of&nbsp;this&nbsp;theorem&nbsp;in&nbsp;the&nbsp;Ssreflect&nbsp;library&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;Hedberg&nbsp;(X:&nbsp;eqType)&nbsp;(x&nbsp;y:&nbsp;X)&nbsp;(E&nbsp;E':&nbsp;x&nbsp;=&nbsp;y)&nbsp;:&nbsp;E&nbsp;=&nbsp;E'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;pose&nbsp;(f&nbsp;:=&nbsp;fun&nbsp;y:&nbsp;X&nbsp;=&gt;&nbsp;fun&nbsp;E:&nbsp;x&nbsp;=&nbsp;y&nbsp;=&gt;&nbsp;match&nbsp;(Dec&nbsp;(x&nbsp;=&nbsp;y))&nbsp;with&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;left&nbsp;b&nbsp;=&gt;&nbsp;b&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;_&nbsp;=&gt;&nbsp;E&nbsp;end).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;apply&nbsp;(@injectiveApply&nbsp;_&nbsp;_(f&nbsp;y)&nbsp;E&nbsp;E').&nbsp;Focus&nbsp;2.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;unfold&nbsp;f.&nbsp;&nbsp;decide&nbsp;(x&nbsp;=&nbsp;y);&nbsp;tauto.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pose&nbsp;(join&nbsp;:=&nbsp;fun&nbsp;(y&nbsp;z&nbsp;:&nbsp;X)&nbsp;(e&nbsp;:&nbsp;x&nbsp;=&nbsp;y)&nbsp;=&gt;&nbsp;eq_trans&nbsp;(z&nbsp;:=&nbsp;z)&nbsp;(eq_sym&nbsp;e)).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;apply&nbsp;&nbsp;(@loop&nbsp;_&nbsp;_&nbsp;(f&nbsp;y)&nbsp;&nbsp;(join&nbsp;x&nbsp;y&nbsp;(f&nbsp;x&nbsp;(eq_refl&nbsp;x)))).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;intros&nbsp;<span class="inlinecode"></span>.&nbsp;unfold&nbsp;f.&nbsp;now&nbsp;deq&nbsp;x.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;<span class="comment">(*&nbsp;Idea&nbsp;taken&nbsp;from&nbsp;the&nbsp;Coq&nbsp;standard&nbsp;library&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Theorem&nbsp;Streicher_K&nbsp;(X:&nbsp;eqType)&nbsp;(x:X)&nbsp;(P:&nbsp;x=x&nbsp;-&gt;&nbsp;Prop):&nbsp;P&nbsp;(eq_refl&nbsp;x)&nbsp;-&gt;&nbsp;&nbsp;forall&nbsp;p,&nbsp;P&nbsp;p.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;intros&nbsp;H&nbsp;p.&nbsp;now&nbsp;rewrite&nbsp;(Hedberg&nbsp;p&nbsp;(eq_refl&nbsp;x)).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;decision&nbsp;(x=x)&nbsp;will&nbsp;always&nbsp;yield&nbsp;the&nbsp;same&nbsp;result&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;DecRef&nbsp;(X:&nbsp;eqType)&nbsp;(x:X)&nbsp;:&nbsp;Dec&nbsp;(x&nbsp;=&nbsp;x)&nbsp;=&nbsp;left&nbsp;eq_refl.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;dec.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;f_equal.&nbsp;&nbsp;now&nbsp;apply&nbsp;(@Streicher_K&nbsp;_&nbsp;_&nbsp;&nbsp;(fun&nbsp;e&nbsp;=&gt;&nbsp;e&nbsp;=&nbsp;eq_refl&nbsp;x)&nbsp;).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;congruence.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Hint&nbsp;Resolve&nbsp;DecRef.&nbsp;*)</span><br/>
+
+<br/>
+</div>
+
+<div class="doc">
+dependent pairs   
+</div>
+<div class="code">
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;sigT_proj1_fun&nbsp;(X:&nbsp;eqType)&nbsp;(f:&nbsp;X&nbsp;-&gt;&nbsp;Type)&nbsp;(x&nbsp;x':&nbsp;X)&nbsp;(y:&nbsp;f&nbsp;x)&nbsp;(y':&nbsp;f&nbsp;x')&nbsp;&nbsp;:&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;existT&nbsp;f&nbsp;x&nbsp;y&nbsp;=&nbsp;existT&nbsp;f&nbsp;x'&nbsp;y'&nbsp;-&gt;&nbsp;x&nbsp;=&nbsp;x'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;intro&nbsp;H.&nbsp;congruence.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Import&nbsp;Logic.EqdepFacts.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;sigT_proj2_fun&nbsp;(X:&nbsp;eqType)&nbsp;(f:&nbsp;X&nbsp;-&gt;&nbsp;Type)&nbsp;&nbsp;(E:&nbsp;forall&nbsp;x,&nbsp;eq_dec&nbsp;(f&nbsp;x))&nbsp;(x:&nbsp;X)&nbsp;(y&nbsp;y':&nbsp;f&nbsp;x):&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;existT&nbsp;f&nbsp;x&nbsp;y&nbsp;=&nbsp;existT&nbsp;f&nbsp;x&nbsp;y'&nbsp;-&gt;&nbsp;y&nbsp;=&nbsp;y'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;intro&nbsp;H.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;rewrite&nbsp;&lt;-&nbsp;(eq_sigT_snd&nbsp;H).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;now&nbsp;rewrite&nbsp;(Hedberg&nbsp;(eq_sigT_fst&nbsp;H)&nbsp;(eq_refl&nbsp;x)).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Instance&nbsp;eq_dec_sigT&nbsp;(X:&nbsp;eqType)&nbsp;(f:&nbsp;X&nbsp;-&gt;&nbsp;Type)&nbsp;(E:&nbsp;forall&nbsp;x,&nbsp;eq_dec&nbsp;(f&nbsp;x))&nbsp;:&nbsp;eq_dec&nbsp;(sigT&nbsp;f).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;intros&nbsp;p1&nbsp;p2.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;destruct&nbsp;p1,&nbsp;p2.&nbsp;decide&nbsp;(x&nbsp;=&nbsp;x0).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;subst&nbsp;x0.&nbsp;decide&nbsp;(f0&nbsp;=&nbsp;f1).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;left.&nbsp;congruence.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;right.&nbsp;intro&nbsp;eq.&nbsp;apply&nbsp;n.&nbsp;now&nbsp;apply&nbsp;sigT_proj2_fun.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;right.&nbsp;intro&nbsp;H.&nbsp;apply&nbsp;n.&nbsp;apply&nbsp;(eq_funTrans&nbsp;(@projT1&nbsp;_&nbsp;&nbsp;f)&nbsp;H).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;subtypes&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;<span class="comment">(*&nbsp;The&nbsp;idea&nbsp;of&nbsp;subtypes&nbsp;was&nbsp;taken&nbsp;from&nbsp;the&nbsp;HF_sets&nbsp;paper&nbsp;by&nbsp;Prof.&nbsp;Gert&nbsp;Smolka&nbsp;and&nbsp;Kathrin&nbsp;Stark&nbsp;*)</span><br/>
+&nbsp;<span class="comment">(*&nbsp;They&nbsp;only&nbsp;defined&nbsp;one&nbsp;particular&nbsp;subtype,&nbsp;however.&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Definition&nbsp;subtype&nbsp;{X:Type}&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;{D:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)}&nbsp;:=&nbsp;{&nbsp;x:X&nbsp;|&nbsp;pure&nbsp;p&nbsp;x}.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;subtype&nbsp;{X}&nbsp;p&nbsp;{D}.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;subtype_extensionality&nbsp;(X:&nbsp;Type)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;&nbsp;{D:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)}&nbsp;(x&nbsp;x':&nbsp;subtype&nbsp;p)&nbsp;:&nbsp;proj1_sig&nbsp;x&nbsp;=&nbsp;proj1_sig&nbsp;x'&nbsp;&lt;-&gt;&nbsp;x&nbsp;=&nbsp;x'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;split.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;intros&nbsp;H.&nbsp;destruct&nbsp;x,&nbsp;x'.&nbsp;cbn&nbsp;in&nbsp;H.&nbsp;subst&nbsp;x0.&nbsp;f_equal.&nbsp;apply&nbsp;pure_eq.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;congruence.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Instance&nbsp;subType_eq_dec&nbsp;(X:&nbsp;eqType)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;(_:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)):&nbsp;eq_dec&nbsp;(subtype&nbsp;p).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;intros&nbsp;y&nbsp;z.&nbsp;destruct&nbsp;y&nbsp;as&nbsp;<span class="inlinecode"><span class="id" title="var">x</span></span> <span class="inlinecode"><span class="id" title="var">p1</span></span>,&nbsp;z&nbsp;as&nbsp;&nbsp;<span class="inlinecode"><span class="id" title="var">x'</span></span> <span class="inlinecode"><span class="id" title="var">p2</span></span>.&nbsp;decide&nbsp;(x=x').&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;left.&nbsp;&nbsp;now&nbsp;apply&nbsp;subtype_extensionality.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;-&nbsp;right.&nbsp;intro&nbsp;H.&nbsp;apply&nbsp;n.&nbsp;apply&nbsp;(eq_funTrans&nbsp;(@proj1_sig&nbsp;_&nbsp;(pure&nbsp;p))&nbsp;H).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;proj1_sig_fun&nbsp;(X:&nbsp;eqType)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;(x&nbsp;x':&nbsp;X)&nbsp;(p1:&nbsp;p&nbsp;x)&nbsp;(p2:&nbsp;p&nbsp;x'):&nbsp;exist&nbsp;p&nbsp;x&nbsp;p1&nbsp;=&nbsp;exist&nbsp;p&nbsp;x'&nbsp;p2&nbsp;-&gt;&nbsp;x&nbsp;=&nbsp;x'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;intro&nbsp;E.&nbsp;change&nbsp;x&nbsp;with&nbsp;(proj1_sig&nbsp;(exist&nbsp;p&nbsp;x&nbsp;p1)).&nbsp;change&nbsp;x'&nbsp;with&nbsp;(proj1_sig&nbsp;(exist&nbsp;p&nbsp;x'&nbsp;p2)).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;now&nbsp;apply&nbsp;eq_funTrans.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;Functions&nbsp;creating&nbsp;an&nbsp;eqType&nbsp;from&nbsp;a&nbsp;type&nbsp;or&nbsp;a&nbsp;value&nbsp;*)</span>&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Definition&nbsp;toeqType&nbsp;(T:&nbsp;Type)&nbsp;{e:&nbsp;eq_dec&nbsp;T}&nbsp;:&nbsp;eqType&nbsp;:=&nbsp;EqType&nbsp;T.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;toeqType&nbsp;T&nbsp;{e}.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect&nbsp;(E:&nbsp;eqType)&nbsp;:&nbsp;E&nbsp;=&nbsp;toeqType&nbsp;E.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;now&nbsp;destruct&nbsp;E.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;Definitions&nbsp;of&nbsp;corresponding&nbsp;eqTypes&nbsp;&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;<span class="comment">(*&nbsp;-&nbsp;Declaration&nbsp;as&nbsp;Canonical&nbsp;Structures&nbsp;to&nbsp;enable&nbsp;their&nbsp;inference&nbsp;later&nbsp;on&nbsp;*)</span>&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;&nbsp;EqUnit&nbsp;:=&nbsp;EqType&nbsp;unit.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqBool&nbsp;:=&nbsp;EqType&nbsp;bool.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqNat&nbsp;:=&nbsp;EqType&nbsp;nat.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqOption&nbsp;(T:&nbsp;eqType)&nbsp;&nbsp;:=&nbsp;EqType&nbsp;(option&nbsp;T).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqProd&nbsp;(T1&nbsp;T2:&nbsp;eqType)&nbsp;:=&nbsp;EqType&nbsp;(T1&nbsp;*&nbsp;T2).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqEmpty_set&nbsp;:=&nbsp;EqType&nbsp;Empty_set.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqFalse&nbsp;:=&nbsp;EqType&nbsp;False.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqTrue&nbsp;:=&nbsp;EqType&nbsp;True.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqSum&nbsp;(X&nbsp;Y:&nbsp;eqType)&nbsp;:=&nbsp;EqType&nbsp;(X&nbsp;+&nbsp;Y).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqList&nbsp;(X:&nbsp;eqType)&nbsp;:=&nbsp;EqType&nbsp;(list&nbsp;X).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqSigT&nbsp;(X:&nbsp;eqType)&nbsp;(f:&nbsp;X&nbsp;-&gt;&nbsp;Type)&nbsp;{D:&nbsp;forall&nbsp;x,&nbsp;eq_dec&nbsp;(f&nbsp;x)}&nbsp;:=&nbsp;EqType&nbsp;(sigT&nbsp;f).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;EqSigT&nbsp;{X}&nbsp;f&nbsp;{D}.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Canonical&nbsp;Structure&nbsp;EqSubType&nbsp;(X:&nbsp;eqType)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;(D:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x))&nbsp;:=&nbsp;EqType&nbsp;(subtype&nbsp;p).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Arguments&nbsp;EqSubType&nbsp;{X}&nbsp;p&nbsp;{D}.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;Useful&nbsp;notations&nbsp;for&nbsp;cross&nbsp;product&nbsp;and&nbsp;option&nbsp;eqTypes&nbsp;&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;<span class="comment">(*&nbsp;-&nbsp;The&nbsp;two&nbsp;different&nbsp;notations&nbsp;mean&nbsp;that&nbsp;arbitrary&nbsp;types&nbsp;are&nbsp;converted&nbsp;to&nbsp;eqTypes&nbsp;first&nbsp;but&nbsp;eqTypes&nbsp;are&nbsp;directly&nbsp;taken&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Reserved&nbsp;Notation&nbsp;"T1&nbsp;**&nbsp;T2"&nbsp;(at&nbsp;level&nbsp;69,&nbsp;no&nbsp;associativity).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Bind&nbsp;Scope&nbsp;EqTypeScope&nbsp;with&nbsp;eqType.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Notation&nbsp;"T1&nbsp;**&nbsp;T2"&nbsp;:=&nbsp;(EqProd&nbsp;T1&nbsp;T2):&nbsp;EqTypeScope.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Notation&nbsp;"T1&nbsp;**&nbsp;T2"&nbsp;:=&nbsp;(EqProd&nbsp;(toeqType&nbsp;T1)&nbsp;(toeqType&nbsp;T2)).&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Notation&nbsp;"&nbsp;??&nbsp;F"&nbsp;:=&nbsp;(EqOption&nbsp;F)&nbsp;(at&nbsp;level&nbsp;65).&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;<span class="comment">(**&nbsp;toeqType&nbsp;produces&nbsp;canonical&nbsp;instances&nbsp;*)</span>&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Set&nbsp;Printing&nbsp;Implicit.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_unit&nbsp;:&nbsp;toeqType&nbsp;unit&nbsp;=&nbsp;EqUnit.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_bool&nbsp;:&nbsp;toeqType&nbsp;bool&nbsp;=&nbsp;EqBool.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_nat&nbsp;:&nbsp;toeqType&nbsp;nat&nbsp;=&nbsp;EqNat.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_option&nbsp;(E:&nbsp;eqType)&nbsp;:&nbsp;toeqType&nbsp;(option&nbsp;E)&nbsp;=&nbsp;??&nbsp;E.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_prod&nbsp;(E&nbsp;E':&nbsp;eqType)&nbsp;:&nbsp;toeqType&nbsp;(E&nbsp;*&nbsp;E')&nbsp;=&nbsp;E&nbsp;**&nbsp;E'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_empty&nbsp;:&nbsp;toeqType&nbsp;Empty_set&nbsp;=&nbsp;EqEmpty_set.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_false&nbsp;:&nbsp;toeqType&nbsp;False&nbsp;=&nbsp;EqFalse.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_true&nbsp;:&nbsp;toeqType&nbsp;True&nbsp;=&nbsp;EqTrue.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqType_sum&nbsp;(E&nbsp;E':&nbsp;eqType):&nbsp;toeqType&nbsp;(E&nbsp;+&nbsp;E')&nbsp;=&nbsp;EqSum&nbsp;E&nbsp;E'.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_list&nbsp;(X:&nbsp;eqType)&nbsp;:&nbsp;toeqType&nbsp;(list&nbsp;X)&nbsp;=&nbsp;EqList&nbsp;X.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_sigT&nbsp;(X:&nbsp;eqType)&nbsp;(f:&nbsp;X&nbsp;-&gt;&nbsp;Type)&nbsp;{D:&nbsp;forall&nbsp;x,&nbsp;eq_dec&nbsp;(f&nbsp;x)}&nbsp;:&nbsp;toeqType&nbsp;{x:X&nbsp;&amp;&nbsp;f&nbsp;x}&nbsp;=&nbsp;EqSigT&nbsp;f.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqTypeCorrect_sub&nbsp;(X:&nbsp;eqType)&nbsp;(p:&nbsp;X&nbsp;-&gt;&nbsp;Prop)&nbsp;{D:&nbsp;forall&nbsp;x,&nbsp;dec&nbsp;(p&nbsp;x)}&nbsp;:&nbsp;toeqType&nbsp;(subtype&nbsp;p)&nbsp;=&nbsp;EqSubType&nbsp;p.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;&nbsp;&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+
+<br/>
+<span class="comment">(*&nbsp;Lemma&nbsp;toeqType_idempotent&nbsp;(X:&nbsp;Type)&nbsp;(_:&nbsp;eq_dec&nbsp;X)&nbsp;:&nbsp;toeqType&nbsp;(toeqType&nbsp;X)&nbsp;=&nbsp;toeqType&nbsp;X.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Proof.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;reflexivity.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Qed.&nbsp;*)</span><br/>
+<span class="comment">(*&nbsp;Unset&nbsp;Printing&nbsp;Implicit.&nbsp;*)</span><br/>
+</div>
+
+<div class="doc">
+Definition of useful functions 
+</div>
+<div class="code">
+<span class="comment">(*&nbsp;-&nbsp;including&nbsp;some&nbsp;lemmas&nbsp;*)</span><br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Function that takes two lists and returns the list of all pairs of elements from the two lists 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a name="prodLists"><span class="id" title="definition">prodLists</span></a> {<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <span class="id" title="keyword">Type</span>} (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) {<span class="id" title="keyword">struct</span> <span class="id" title="var">A</span>} :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#cons"><span class="id" title="constructor">cons</span></a> <span class="id" title="var">x</span> <span class="id" title="var">A'</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">y</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><span class="id" title="var">x</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#prodLists"><span class="id" title="definition">prodLists</span></a> <span class="id" title="var">A'</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Crossing any list with the empty list always yields the empty list 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="prod_nil"><span class="id" title="lemma">prod_nil</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <span class="id" title="keyword">Type</span>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#prodLists"><span class="id" title="definition">prodLists</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#145bedf8a5d4a541831f3f70db03085c"><span class="id" title="notation">[]</span></a>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#145bedf8a5d4a541831f3f70db03085c"><span class="id" title="notation">[]</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This function takes a (A: list X) and yields a list (option X) which for every x in A contains Some x. The resultung list also contains None. The order is preserved. None is the first element of the resulting list. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="toOptionList"><span class="id" title="definition">toOptionList</span></a> {<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>} (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> (@<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> .<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+This function counts the number of occurences of an element in a given list and returns the result 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a name="count"><span class="id" title="definition">count</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>) `{<a class="idref" href="LM.Base.Prelim.html#c43c98973cd23ca7227cfc325478040e"><span class="id" title="notation">eq_dec</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>}  (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a>  <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">x</span>:  <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) {<span class="id" title="keyword">struct</span> <span class="id" title="var">A</span>} : <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#O"><span class="id" title="constructor">O</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#cons"><span class="id" title="constructor">cons</span></a> <span class="id" title="var">y</span> <span class="id" title="var">A'</span> =&gt;  <span class="id" title="keyword">if</span> <a class="idref" href="LM.Base.Prelim.html#Dec"><span class="id" title="definition">Dec</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><span class="id" title="var">y</span>) <span class="id" title="keyword">then</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a>(<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <span class="id" title="var">A'</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a>) <span class="id" title="keyword">else</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <span class="id" title="var">A'</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <a name="toSumList1"><span class="id" title="definition">toSumList1</span></a> {<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>}  (<span class="id" title="var">Y</span>: <span class="id" title="keyword">Type</span>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#3dcaec3b772747610227247939f96b01"><span class="id" title="notation">+</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inl"><span class="id" title="constructor">inl</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>.<br/>
+<span class="id" title="keyword">Definition</span> <a name="toSumList2"><span class="id" title="definition">toSumList2</span></a> {<span class="id" title="var">Y</span>: <span class="id" title="keyword">Type</span>}  (<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>): <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#3dcaec3b772747610227247939f96b01"><span class="id" title="notation">+</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inr"><span class="id" title="constructor">inr</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Basic lemmas about functions 
+<div class="paragraph"> </div>
+
+ In the list containing all pairs of (x,y') with y' from a list B the pair (x,y) is contained exactly as many times as y is contained in the list B. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="countMap"><span class="id" title="lemma">countMap</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) <span class="id" title="var">y</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> ( <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">y</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">B</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">simpl</span>. <span class="id" title="var">dec</span>;  <span class="id" title="tactic">congruence</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+If a list is split somewhere in two list the number of occurences of an element in the list is equal to the sum of the number of occurences in the left and the right part. 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="countSplit"><span class="id" title="lemma">countSplit</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">A</span> <span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>)  : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="var">decide</span> (<span class="id" title="var">x</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a><span class="id" title="var">a</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+<span class="id" title="var">cbn</span>. <span class="id" title="tactic">f_equal</span>; <span class="id" title="tactic">exact</span> <span class="id" title="var">IHA</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">exact</span> <span class="id" title="var">IHA</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+In a list of tupels with x as a left element the number of tupels with something different from x as a left element is 0. 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="countMapZero"><span class="id" title="lemma">countMapZero</span></a>  (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span> <span class="id" title="var">x'</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) <span class="id" title="var">y</span> : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x'"><span class="id" title="variable">x'</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#32263a1c8b01baecdff9deb038955bc9"><span class="id" title="notation">&lt;&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a>  ( <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> (<span class="id" title="keyword">fun</span> <span class="id" title="var">y</span> =&gt; <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x'"><span class="id" title="variable">x'</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a>0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">ineq</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">B</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;-  <span class="id" title="tactic">simpl</span>. <span class="id" title="var">dec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">inversion</span> <span class="id" title="var">e</span>; <span class="id" title="tactic">congruence</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">exact</span> <span class="id" title="var">IHB</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="notInZero"><span class="id" title="lemma">notInZero</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) <span class="id" title="var">A</span> :<br/>
+&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#not"><span class="id" title="definition">not</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">split</span>; <span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>.<br/>
+&nbsp;&nbsp;-  <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>. <span class="id" title="var">cbn</span> <span class="id" title="tactic">in</span> *. <span class="id" title="var">dec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="var">exfalso</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">left</span>. <span class="id" title="tactic">congruence</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">IHA</span>. <span class="id" title="tactic">intros</span> <span class="id" title="var">F</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">right</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">tauto</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="var">dec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">omega</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">intros</span> <span class="id" title="var">H</span> [<span class="id" title="var">E</span> | <span class="id" title="var">E</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="var">now</span> <span class="id" title="tactic">symmetry</span> <span class="id" title="tactic">in</span> <span class="id" title="var">E</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">tauto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="countIn"><span class="id" title="lemma">countIn</span></a> (<span class="id" title="var">X</span>:<a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) <span class="id" title="var">A</span>:<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0 <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="tactic">omega</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="var">dec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">left</span>. <span class="id" title="tactic">symmetry</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">e</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">right</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">IHA</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="InCount"><span class="id" title="lemma">InCount</span></a> (<span class="id" title="var">X</span>:<a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) <span class="id" title="var">A</span>:<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [].<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [[] | <span class="id" title="var">E</span>]; <span class="id" title="var">cbn</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="var">deq</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">omega</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHA</span> <span class="id" title="var">E</span>). <span class="id" title="var">dec</span>; <span class="id" title="tactic">omega</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="count_in_equiv"><span class="id" title="lemma">count_in_equiv</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) <span class="id" title="var">A</span> : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0 <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#df1ced36fc33ce188051218bca314374"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#countIn"><span class="id" title="lemma">countIn</span></a>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">apply</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#InCount"><span class="id" title="lemma">InCount</span></a>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="countApp"><span class="id" title="lemma">countApp</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">A</span> <span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a>) <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">auto</span> <span class="id" title="keyword">using</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#InCount"><span class="id" title="lemma">InCount</span></a>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+ Dupfree Lists containing every x countain x exactly once 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="dupfreeCount"><span class="id" title="lemma">dupfreeCount</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) : <a class="idref" href="LM.Base.Lists.Dupfree.html#dupfree"><span class="id" title="inductive">dupfree</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 1.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">D</span> <span class="id" title="var">E</span>. <span class="id" title="tactic">induction</span> <span class="id" title="var">D</span>.<br/>
+&nbsp;&nbsp;-  <span class="id" title="var">contradiction</span> <span class="id" title="var">E</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">cbn</span>. <span class="id" title="var">dec</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">f_equal</span>. <span class="id" title="tactic">subst</span> <span class="id" title="var">x0</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#notInZero"><span class="id" title="lemma">notInZero</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">destruct</span> <span class="id" title="var">E</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">E</span> | <span class="id" title="var">E</span>]; [&gt; <span class="id" title="tactic">congruence</span> | <span class="id" title="tactic">auto</span>].<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+toSumlist1 does not change the number of occurences of an existing element in the list 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toSumList1_count"><span class="id" title="lemma">toSumList1_count</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#toSumList1"><span class="id" title="definition">toSumList1</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>) (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inl"><span class="id" title="constructor">inl</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a>  <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> .<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="tactic">simpl</span>; <span class="id" title="var">dec</span>; <span class="id" title="tactic">congruence</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+toSumlist2 odes not change the numbe of occurences of an existing element in the list 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toSumList2_count"><span class="id" title="lemma">toSumList2_count</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">y</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>):<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#toSumList2"><span class="id" title="definition">toSumList2</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>) (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inr"><span class="id" title="constructor">inr</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="tactic">simpl</span>; <span class="id" title="var">dec</span>; <span class="id" title="tactic">congruence</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+to sumList1 does not produce inr proofs 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toSumList1_missing"><span class="id" title="lemma">toSumList1_missing</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">y</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>):<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#toSumList1"><span class="id" title="definition">toSumList1</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> ) (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inr"><span class="id" title="constructor">inr</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#y"><span class="id" title="variable">y</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="var">dec</span>; <span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+toSumlist2 does not produce inl proofs 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="toSumList2_missing"><span class="id" title="lemma">toSumList2_missing</span></a> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#Y"><span class="id" title="variable">Y</span></a>):<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#toSumList2"><span class="id" title="definition">toSumList2</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> ) (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#inl"><span class="id" title="constructor">inl</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="var">dec</span>; <span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Cardinality Lemmas for lists
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="cons_incll"><span class="id" title="lemma">cons_incll</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>) (<span class="id" title="var">A</span> <span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">x</span>:<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#0a8150c3c4df34d205c5ed9a427e2ed5"><span class="id" title="notation">::</span></a><a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#8e46876ef68d288acadbc730f4291759"><span class="id" title="notation">&lt;&lt;=</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#8e46876ef68d288acadbc730f4291759"><span class="id" title="notation">&lt;&lt;=</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> "&lt;&lt;=". <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="card_length_leq"><span class="id" title="lemma">card_length_leq</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) : <a class="idref" href="LM.Base.Lists.Cardinality.html#card"><span class="id" title="definition">card</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#9b077c369e19739ef880736ba34623ff"><span class="id" title="notation">&lt;=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#length"><span class="id" title="definition">length</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="tactic">auto</span>. <span class="id" title="var">cbn</span>. <span class="id" title="var">dec</span>; <span class="id" title="tactic">omega</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Various helpful Lemmas 
+<div class="paragraph"> </div>
+
+ If the concatenation of two lists is nil then each list was nil 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="appendNil"><span class="id" title="lemma">appendNil</span></a> (<span class="id" title="var">X</span>: <span class="id" title="keyword">Type</span>) (<span class="id" title="var">A</span> <span class="id" title="var">B</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) :<br/>
+&nbsp;&nbsp;<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#B"><span class="id" title="variable">B</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#nil"><span class="id" title="constructor">nil</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">assert</span> (<a class="idref" href="LM.Base.Lists.BaseLists.html#0f744656724bd3a835a0e59c84de97b8"><span class="id" title="notation">|</span></a><span class="id" title="var">A</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#5d35a99a6abff1d64bf70538feb70e36"><span class="id" title="notation">++</span></a> <span class="id" title="var">B</span><a class="idref" href="LM.Base.Lists.BaseLists.html#0f744656724bd3a835a0e59c84de97b8"><span class="id" title="notation">|</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0) <span class="id" title="tactic">by</span> <span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#app_length"><span class="id" title="lemma">app_length</span></a> <span class="id" title="tactic">in</span> <span class="id" title="var">H0</span>. <span class="id" title="tactic">rewrite</span> &lt;- !<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#length_zero_iff_nil"><span class="id" title="lemma">length_zero_iff_nil</span></a>. <span class="id" title="tactic">omega</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a name="countZero"><span class="id" title="lemma">countZero</span></a> (<span class="id" title="var">X</span>: <a class="idref" href="LM.Base.Prelim.html#eqType"><span class="id" title="record">eqType</span></a>) (<span class="id" title="var">x</span>: <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) (<span class="id" title="var">A</span>: <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#X"><span class="id" title="variable">X</span></a>) : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#count"><span class="id" title="definition">count</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#1c39bf18749e5cc609e83c0a0ba5a372"><span class="id" title="notation">=</span></a> 0 <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#not"><span class="id" title="definition">not</span></a> (<a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#x"><span class="id" title="variable">x</span></a> <a class="idref" href="LM.Base.Lists.BaseLists.html#09f13acf64ec06844d18a8e595262b60"><span class="id" title="notation">el</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#A"><span class="id" title="variable">A</span></a>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">A</span>; <span class="id" title="var">cbn</span> <span class="id" title="tactic">in</span> *; <span class="id" title="var">dec</span>; <span class="id" title="tactic">firstorder</span> <span class="id" title="tactic">congruence</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The product of two numbers is greater zero if both numbers are greater zero 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a name="NullMul"><span class="id" title="lemma">NullMul</span></a> <span class="id" title="var">a</span> <span class="id" title="var">b</span> : <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#a"><span class="id" title="variable">a</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0 <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0 <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#a"><span class="id" title="variable">a</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#697e4695610f677ae98a52af81f779d2"><span class="id" title="notation">*</span></a> <a class="idref" href="LM.Base.FiniteTypes.BasicDefinitions.html#b"><span class="id" title="variable">b</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#19ab5cfd7e4f60fa14f22b576013bd96"><span class="id" title="notation">&gt;</span></a> 0.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> 1; <span class="id" title="var">cbn</span>; <span class="id" title="tactic">omega</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+</div>
+</div>
+<div id="footer">
+  Generated by <a href="http://coq.inria.fr/">coqdoc</a> and improved with <a href="https://github.com/tebbi/coqdocjs">CoqdocJS</a>
+</div>
+</div>
+</body>
+
+</html>
