@@ -30,6 +30,9 @@ Proof.
 Qed.
 
 (** ** Time *)
+ (** We can show the right generalisation that connects the big-step characterisation of the L time resource measure with abstract machine steps.
+  For technical reasons, we seperate that there *is* a abstract machine reduction from the exact analysis of the step that reduction takes, 
+ by using evars and a existential quantified variable [l] that collects the steps during the proof and which we show equal to the desired formula (3k+1) afterwards. *)
 
 Lemma correctTime' s t k c0 C V:
   timeBS k s t -> 
@@ -85,7 +88,7 @@ Qed.
 
 Definition redWithMaxSizeS := redWithMaxSize (fun '(T',V') => (sum (map sizeP T') + sum (map sizeP V'))) step.
 
-
+(** The carefullt balanced generalisation will go through, as for time. We again first collect the precise size [m] of intermediate steps as implied by the machine rules/inductive hypothesis and afterwards show that [m] always is in the claimed bounds. *)
 Lemma correctSpace' s t k P T V:
   spaceBS k s t -> 
   exists m Q , reprP Q t /\
@@ -123,7 +126,9 @@ Proof.
     erewrite substP_correct with (t:=lam t'). 
     eapply R3.
     reflexivity.
-    cbn. eapply redWithMaxSizeR. reflexivity. reflexivity. reflexivity. reflexivity. 
+    cbn. eapply redWithMaxSizeR. reflexivity. reflexivity. reflexivity. reflexivity.
+    (** Now, a very tedious analysis of all the involved state sizes and different results for [max] yields that the claim indeed holds. 
+    Luckely, we can automat this by using [omega] after providing all the neccessary instances of needed lemmatas and doing all the case splits for the [max]-function. *)
     1:{
       cbn -[max].
       rewrite !tc_compile in *.

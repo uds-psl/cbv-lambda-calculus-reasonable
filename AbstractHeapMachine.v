@@ -185,6 +185,9 @@ Section Lin.
   Qed.
 
   (** ** Time *)
+  (** We can show the right generalisation that connects the big-step characterisation of the L time resource measure with abstract machine steps.
+  For technical reasons, we seperate that there *is* a abstract machine reduction from the exact analysis of the step that reduction takes, 
+ by using evars and a existential quantified variable [l] that collects the steps during the proof and which we show equal to the desired formula (4k+1) afterwards. *)
   
   Lemma correctTime' s t k s0 P a T V H:
   timeBS k s t -> unfolds H a 0 s0 s ->
@@ -299,6 +302,8 @@ Section Analysis.
   Qed.
 
   (** ** Space *)
+  (** As the closures get passed between T,V and H, the analysis that all programs are always smaller than 
+  the inital term and that all addresses are allocatd in H needs to be done simultaniously, by induction on the number of machine steps. *)
 
   Lemma size_clos P a : ((P!a) el (T++V) -> sizeP P <= 2*size s /\ a <= length H)
                         /\ (forall beta, heapEntryC (P!a) beta el H -> sizeP P <= 2*size s /\ a <= length H /\ beta <= length H).
