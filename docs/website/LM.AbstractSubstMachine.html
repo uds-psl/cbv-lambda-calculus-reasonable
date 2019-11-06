@@ -82,7 +82,9 @@
 
 <div class="doc">
 <a name="lab23"></a><h2 class="section">Time</h2>
-
+ We can show the right generalisation that connects the big-step characterisation of the L time resource measure with abstract machine steps.
+  For technical reasons, we seperate that there *is* a abstract machine reduction from the exact analysis of the step that reduction takes, 
+ by using evars and a existential quantified variable <span class="inlinecode"><span class="id" title="var">l</span></span> that collects the steps during the proof and which we show equal to the desired formula (3k+1) afterwards. 
 </div>
 <div class="code">
 
@@ -154,6 +156,12 @@
 <span class="id" title="keyword">Definition</span> <a name="redWithMaxSizeS"><span class="id" title="definition">redWithMaxSizeS</span></a> := <a class="idref" href="LM.ARS.html#redWithMaxSize"><span class="id" title="inductive">redWithMaxSize</span></a> (<span class="id" title="keyword">fun</span> '<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">(</span></a><span class="id" title="var">T'</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">,</span></a><span class="id" title="var">V'</span><a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Datatypes.html#44400027531d4bc3f586a1997dc874c0"><span class="id" title="notation">)</span></a> =&gt; (<a class="idref" href="LM.Programs.html#sum"><span class="id" title="definition">sum</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> <a class="idref" href="LM.Programs.html#sizeP"><span class="id" title="definition">sizeP</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#T'"><span class="id" title="variable">T'</span></a>) <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Peano.html#b3eea360671e1b32b18a26e15b3aace3"><span class="id" title="notation">+</span></a> <a class="idref" href="LM.Programs.html#sum"><span class="id" title="definition">sum</span></a> (<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Lists.List.html#map"><span class="id" title="definition">map</span></a> <a class="idref" href="LM.Programs.html#sizeP"><span class="id" title="definition">sizeP</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#V'"><span class="id" title="variable">V'</span></a>))) <a class="idref" href="LM.AbstractSubstMachine.html#step"><span class="id" title="inductive">step</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+The carefullt balanced generalisation will go through, as for time. We again first collect the precise size <span class="inlinecode"><span class="id" title="var">m</span></span> of intermediate steps as implied by the machine rules/inductive hypothesis and afterwards show that <span class="inlinecode"><span class="id" title="var">m</span></span> always is in the claimed bounds. 
+</div>
+<div class="code">
 <span class="id" title="keyword">Lemma</span> <a name="correctSpace'"><span class="id" title="lemma">correctSpace'</span></a> <span class="id" title="var">s</span> <span class="id" title="var">t</span> <span class="id" title="var">k</span> <span class="id" title="var">P</span> <span class="id" title="var">T</span> <span class="id" title="var">V</span>:<br/>
 &nbsp;&nbsp;<a class="idref" href="LM.L.html#spaceBS"><span class="id" title="inductive">spaceBS</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#k"><span class="id" title="variable">k</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#s"><span class="id" title="variable">s</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d43e996736952df71ebeeae74d10a287"><span class="id" title="notation">-&gt;</span></a> <br/>
 &nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">exists</span></a> <span class="id" title="var">m</span> <span class="id" title="var">Q</span> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#84eb6d2849dbf3581b1c0c05add5f2d8"><span class="id" title="notation">,</span></a> <a class="idref" href="LM.Programs.html#reprP"><span class="id" title="inductive">reprP</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#Q"><span class="id" title="variable">Q</span></a> <a class="idref" href="LM.AbstractSubstMachine.html#t"><span class="id" title="variable">t</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.8.2/stdlib//Coq.Init.Logic.html#d82a7d96d3659d805ffe732283716822"><span class="id" title="notation">/\</span></a><br/>
@@ -194,6 +202,13 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">R3</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">cbn</span>. <span class="id" title="tactic">eapply</span> <a class="idref" href="LM.ARS.html#redWithMaxSizeR"><span class="id" title="constructor">redWithMaxSizeR</span></a>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+</div>
+
+<div class="doc">
+Now, a very tedious analysis of all the involved state sizes and different results for <span class="inlinecode"><span class="id" title="var">max</span></span> yields that the claim indeed holds. 
+    Luckely, we can automat this by using <span class="inlinecode"><span class="id" title="tactic">omega</span></span> after providing all the neccessary instances of needed lemmatas and doing all the case splits for the <span class="inlinecode"><span class="id" title="var">max</span></span>-function. 
+</div>
+<div class="code">
 &nbsp;&nbsp;&nbsp;&nbsp;1:{<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">cbn</span> -[<span class="id" title="var">max</span>].<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> !<a class="idref" href="LM.AbstractSubstMachine.html#tc_compile"><span class="id" title="lemma">tc_compile</span></a> <span class="id" title="tactic">in</span> *.<br/>
